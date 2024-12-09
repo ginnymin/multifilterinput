@@ -11,11 +11,11 @@ import { TbSquareRoundedCheckFilled } from "react-icons/tb";
 import { Combobox, type Option } from "@components/Combobox";
 import { MultiKey, SingleKey } from "@lib/types";
 
-type InputProps = {
+interface InputProps {
   className?: string;
   onBackspace?: () => void;
   onSelect: (value: string | number | (string | number)[]) => void;
-};
+}
 
 type SingleProps = InputProps & {
   initialValue?: string | number;

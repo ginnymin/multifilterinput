@@ -80,7 +80,7 @@ describe("Components: Filter", () => {
     expect(screen.getByRole("button", { name: "Save filter" })).toBeDisabled();
   });
 
-  it("renders with default filter values", async () => {
+  it("renders with default filter values", () => {
     render(
       <Filter
         keys={keys}

@@ -1,24 +1,17 @@
-export type SingleKey = {
+export interface SingleKey {
   id: string;
   name: string;
   type: "string" | "number" | "date";
-};
+}
 
-export type MultiKey = {
+export interface MultiKey {
   id: string;
   name: string;
   type: "select" | "multiselect";
   values: (string | number)[];
-};
+}
 
 export type Key = SingleKey | MultiKey;
-
-// export type Key = {
-//   id: string;
-//   name: string;
-//   type: "string" | "number" | "date" | "select" | "multiselect";
-//   values?: (string | number)[]; // for select / multiselect types
-// };
 
 export type Operator =
   | "="
@@ -32,15 +25,15 @@ export type Operator =
   | "<="
   | ">=";
 
-type FilterWithSet = {
+export interface FilterWithSet {
   key: Key["id"];
   operator: Extract<Operator, "set" | "!set">;
-};
+}
 
-type FilterWithoutSet = {
+export interface FilterWithoutSet {
   key: Key["id"];
   operator: Exclude<Operator, "set" | "!set">;
   value: string | number | (string | number)[];
-};
+}
 
 export type Filter = FilterWithSet | FilterWithoutSet;
