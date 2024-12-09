@@ -1,8 +1,11 @@
 import { useState } from "react";
 
-import { MultiFilterInput } from "@components/MultiFilterInput";
+import {
+  MultiFilterInput,
+  type Filter,
+  type Key,
+} from "@components/MultiFilterInput";
 import { operators } from "@lib/constants";
-import { Filter, Key } from "@lib/types";
 
 const keys: Key[] = [
   { id: "1", name: "Name", type: "string" },
@@ -32,7 +35,6 @@ function App() {
   return (
     <div className="m-6">
       <MultiFilterInput keys={keys} onChange={handleChange} />
-
       <p className="mt-4 font-bold">Current filters:</p>
       <ul>
         {currentFilters.map((filter, i) => (
