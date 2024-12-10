@@ -13,18 +13,17 @@ import { MultiKey, SingleKey } from "@lib/types";
 
 interface InputProps {
   className?: string;
+  initialValue?: string | number | (string | number)[];
   onBackspace?: () => void;
   onSelect: (value: string | number | (string | number)[]) => void;
 }
 
 type SingleProps = InputProps & {
-  initialValue?: string | number;
   type: SingleKey["type"];
   values?: never;
 };
 
 type MultiProps = InputProps & {
-  initialValue?: (string | number)[];
   type: MultiKey["type"];
   values: MultiKey["values"];
 };
@@ -41,7 +40,11 @@ export const ValueInput: FC<Props> = ({
   ...props
 }) => {
   const [value, setValue] = useState<string | number | (string | number)[]>(
-    initialValue ?? (type === "multiselect" ? [] : "")
+    type === "multiselect"
+      ? Array.isArray(initialValue)
+        ? initialValue
+        : []
+      : initialValue ?? ""
   );
 
   const isDisabled =

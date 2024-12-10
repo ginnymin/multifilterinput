@@ -98,6 +98,26 @@ describe("Components: Filter", () => {
     expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
   });
 
+  it("renders with default select values", () => {
+    render(
+      <Filter
+        keys={keys}
+        onSelect={mockOnSelect}
+        defaultFilter={{ key: "4", operator: "=", value: "Value 2" }}
+      />
+    );
+
+    expect(screen.getByText("Select type")).toBeVisible();
+    expect(screen.getByText("equals")).toBeVisible();
+    expect(
+      screen.getByRole("combobox", { name: "Filter value" })
+    ).toBeVisible();
+    expect(screen.getByRole("combobox", { name: "Filter value" })).toHaveValue(
+      "Value 2"
+    );
+    expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
+  });
+
   it("calls onSelect when user clicks save", async () => {
     render(<Filter keys={keys} onSelect={mockOnSelect} />);
 

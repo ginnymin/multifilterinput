@@ -16,6 +16,7 @@ type FilterWithId = FilterType & {
 };
 
 const addIdToFilter = (filter: FilterType): FilterWithId => {
+  const timestamp = new Date().getTime();
   const value =
     "value" in filter
       ? Array.isArray(filter.value)
@@ -23,8 +24,11 @@ const addIdToFilter = (filter: FilterType): FilterWithId => {
         : filter.value.toString()
       : undefined;
   return value !== undefined
-    ? { ...filter, id: `${filter.key}-${filter.operator}-${value}` }
-    : { ...filter, id: `${filter.key}-${filter.operator}` };
+    ? {
+        ...filter,
+        id: `${filter.key}-${filter.operator}-${value}-${timestamp}`,
+      }
+    : { ...filter, id: `${filter.key}-${filter.operator}-${timestamp}` };
 };
 
 /**
@@ -61,6 +65,8 @@ export const MultiFilterInput: FC<Props> = ({
               operator: filter.operator,
             }
       );
+
+      setFilters(filters);
       onChange(sanitizedFilters);
     },
     [onChange]
@@ -68,13 +74,10 @@ export const MultiFilterInput: FC<Props> = ({
 
   const addFilter: FilterProps["onSelect"] = useCallback(
     (filter) => {
-      setFilters((prev) => {
-        const newFilters = [...prev, addIdToFilter(filter)];
-        handleChange(newFilters);
-        return newFilters;
-      });
+      const newFilters = [...filters, addIdToFilter(filter)];
+      handleChange(newFilters);
     },
-    [handleChange]
+    [filters, handleChange]
   );
 
   const setEditFilter = useCallback(
@@ -86,31 +89,24 @@ export const MultiFilterInput: FC<Props> = ({
 
   const editFilter = useCallback(
     (id: FilterWithId["id"]) => (filter: FilterType) => {
-      setFilters((prev) => {
-        const newFilters = prev.map((f) => {
-          if (f.id === id) {
-            return addIdToFilter(filter);
-          }
+      const newFilters = filters.map((f) => {
+        if (f.id === id) {
+          return addIdToFilter(filter);
+        }
 
-          return f;
-        });
-
-        handleChange(newFilters);
-        return newFilters;
+        return f;
       });
+      handleChange(newFilters);
     },
-    [handleChange]
+    [filters, handleChange]
   );
 
   const removeFilter = useCallback(
     (id: FilterWithId["id"]) => () => {
-      setFilters((prev) => {
-        const newFilters = prev.filter((f) => f.id !== id);
-        handleChange(newFilters);
-        return newFilters;
-      });
+      const newFilters = filters.filter((f) => f.id !== id);
+      handleChange(newFilters);
     },
-    [handleChange]
+    [filters, handleChange]
   );
 
   return (
@@ -121,11 +117,11 @@ export const MultiFilterInput: FC<Props> = ({
         className
       )}
     >
-      {filters.map((filter, index) => {
+      {filters.map((filter) => {
         if (editFilterId === filter.id) {
           return (
             <Filter
-              key={`${index}-${filter.id}`}
+              key={`${filter.id}`}
               keys={keys}
               operators={operators}
               onSelect={editFilter(filter.id)}
@@ -138,7 +134,7 @@ export const MultiFilterInput: FC<Props> = ({
 
         return (
           <Chip
-            key={`${index}-${filter.id}`}
+            key={`${filter.id}`}
             onSelect={setEditFilter(filter.id)}
             onRemove={removeFilter(filter.id)}
           >

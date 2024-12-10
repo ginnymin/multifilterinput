@@ -111,7 +111,7 @@ export const Filter: FC<Props> = ({
   return (
     <div {...props} className={clsx("flex gap-2 items-baseline", className)}>
       {currentKey !== undefined ? (
-        <span>{currentKey.name}</span>
+        <span className="font-bold text-blue-600">{currentKey.name}</span>
       ) : (
         <KeySelector
           keys={keys}
@@ -123,7 +123,9 @@ export const Filter: FC<Props> = ({
 
       {currentKey !== undefined ? (
         currentOperator !== undefined ? (
-          <span>{currentOperator.value}</span>
+          <span className="font-bold text-blue-600">
+            {currentOperator.value}
+          </span>
         ) : (
           <OperatorSelector
             type={currentKey.type}
@@ -141,9 +143,7 @@ export const Filter: FC<Props> = ({
           <ValueInput
             type={currentKey.type}
             initialValue={
-              defaultFilter !== undefined &&
-              "value" in defaultFilter &&
-              Array.isArray(defaultFilter.value)
+              defaultFilter !== undefined && "value" in defaultFilter
                 ? defaultFilter.value
                 : undefined
             }

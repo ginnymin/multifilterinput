@@ -115,8 +115,25 @@ export const Combobox: FC<Props> = ({
           onBackspace();
         }
       }
+
+      if (
+        event.key === "Enter" &&
+        isStatic &&
+        selectedOptions !== undefined &&
+        !Array.isArray(selectedOptions)
+      ) {
+        onChange(selectedOptions);
+      }
     },
-    [onBackspace, onRemoveOption, query, isStatic, multiple, selectedOptions]
+    [
+      onBackspace,
+      onRemoveOption,
+      query,
+      isStatic,
+      multiple,
+      selectedOptions,
+      onChange,
+    ]
   );
 
   const filteredOptions = useMemo(

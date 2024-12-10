@@ -53,6 +53,42 @@ describe("Components: ValueInput", () => {
     expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
   });
 
+  it("renders with initial multiselect values", async () => {
+    render(
+      <ValueInput
+        type="multiselect"
+        onSelect={mockOnSelect}
+        initialValue={["Value 2"]}
+        values={["Value 1", "Value 2", "Value 3"]}
+      />
+    );
+
+    await screen.findByRole("listbox");
+    await userEvent.keyboard("{Escape}");
+
+    expect(screen.getByText("Value 2")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
+  });
+
+  it("handles mismatched initial value", async () => {
+    render(
+      <ValueInput
+        type="multiselect"
+        onSelect={mockOnSelect}
+        initialValue="Initial value"
+        values={["Value 1", "Value 2", "Value 3"]}
+      />
+    );
+
+    await screen.findByRole("listbox");
+    await userEvent.keyboard("{Escape}");
+
+    expect(screen.getByRole("combobox", { name: "Filter value" })).toHaveValue(
+      ""
+    );
+    expect(screen.getByRole("button", { name: "Save filter" })).toBeDisabled();
+  });
+
   it("calls onSelect", async () => {
     render(<ValueInput type="string" onSelect={mockOnSelect} />);
 

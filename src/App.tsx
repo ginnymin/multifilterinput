@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   MultiFilterInput,
@@ -36,9 +36,9 @@ const operators: OperatorDefinition[] = [
 function App() {
   const [currentFilters, setCurrentFilters] = useState<Filter[]>([]);
 
-  const handleChange = (filters: Filter[]) => {
+  const handleChange = useCallback((filters: Filter[]) => {
     setCurrentFilters(filters);
-  };
+  }, []);
 
   return (
     <div className="m-6">
