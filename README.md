@@ -2,6 +2,8 @@
 
 A component that allows users to select multiple filter criteria from the convience of a single input.
 
+See it in action: https://multifilterinput.vercel.app
+
 ## Usage
 
 ```tsx
@@ -105,3 +107,11 @@ interface FilterWithoutSet {
 
 type Filter = FilterWithSet | FilterWithoutSet;
 ```
+
+## Available scripts
+
+- `npm run dev`: Run the development server.
+- `npm run build`: Build the production version.
+- `npm run preview`: Preview the production version.
+- `npm run test`: Run tests.
+- `npm run lint`: Run type and lint checks.
