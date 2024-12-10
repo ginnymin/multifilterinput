@@ -2,11 +2,12 @@ import clsx from "clsx";
 import { HTMLAttributes, useCallback, useState, type FC } from "react";
 
 import { Filter, type FilterProps } from "@components/Filter";
-import { type Filter as FilterType, type Key } from "@lib/types";
+import type { OperatorDefinition, Filter as FilterType, Key } from "@lib/types";
 import { Chip } from "@components/Chip";
 
 interface Props extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
   keys: Key[];
+  operators?: OperatorDefinition[];
   onChange: (filters: FilterType[]) => void;
 }
 
@@ -37,6 +38,7 @@ export const MultiFilterInput: FC<Props> = ({
   autoFocus,
   className,
   keys,
+  operators,
   onChange,
   ...props
 }) => {
@@ -125,6 +127,7 @@ export const MultiFilterInput: FC<Props> = ({
             <Filter
               key={`${index}-${filter.id}`}
               keys={keys}
+              operators={operators}
               onSelect={editFilter(filter.id)}
               defaultFilter={filter}
             />
@@ -151,6 +154,7 @@ export const MultiFilterInput: FC<Props> = ({
 
       <Filter
         keys={keys}
+        operators={operators}
         onSelect={addFilter}
         autoFocus={autoFocus === true || filters.length > 0}
       />

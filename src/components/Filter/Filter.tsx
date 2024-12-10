@@ -9,17 +9,18 @@ import {
 } from "react";
 
 import { KeySelector, type KeySelectorProps } from "@components/KeySelector";
-import { type Filter as FilterType, type Key } from "@lib/types";
+import type { OperatorDefinition, Filter as FilterType, Key } from "@lib/types";
 import {
   OperatorSelector,
   OperatorSelectorProps,
 } from "@components/OperatorSelector";
 import { ValueInput, ValueInputProps } from "@components/ValueInput";
-import { operators } from "@lib/constants";
+import { operators as defaultOperators } from "@lib/constants";
 
 type Props = Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> & {
   defaultFilter?: FilterType;
   keys: Key[];
+  operators?: OperatorDefinition[];
   onSelect: (filter: FilterType) => void;
 };
 
@@ -28,6 +29,7 @@ export const Filter: FC<Props> = ({
   className,
   defaultFilter,
   keys,
+  operators = defaultOperators,
   onSelect,
   ...props
 }) => {
@@ -103,7 +105,7 @@ export const Filter: FC<Props> = ({
   const currentKey = useMemo(() => keys.find((k) => k.id === key), [key, keys]);
   const currentOperator = useMemo(
     () => operators.find((o) => o.id === operator),
-    [operator]
+    [operator, operators]
   );
 
   return (
@@ -125,6 +127,7 @@ export const Filter: FC<Props> = ({
         ) : (
           <OperatorSelector
             type={currentKey.type}
+            operators={operators}
             selectedId={selectedOperator.current}
             onBackspace={handleOperatorBackspace}
             onChange={handleOperatorChange}

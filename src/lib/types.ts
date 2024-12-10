@@ -13,7 +13,7 @@ export interface MultiKey {
 
 export type Key = SingleKey | MultiKey;
 
-export type Operator =
+type Operator =
   | "="
   | "!="
   | "set"
@@ -24,6 +24,12 @@ export type Operator =
   | ">"
   | "<="
   | ">=";
+
+export interface OperatorDefinition {
+  id: string;
+  value: string;
+  types: Key["type"][];
+}
 
 export interface FilterWithSet {
   key: Key["id"];

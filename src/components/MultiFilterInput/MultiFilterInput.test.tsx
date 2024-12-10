@@ -1,9 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { Key } from "@lib/types";
-
-import { MultiFilterInput } from ".";
+import { MultiFilterInput, type Key, type OperatorDefinition } from ".";
 
 const keys: Key[] = [
   { id: "1", name: "String type", type: "string" },
@@ -23,6 +21,13 @@ const keys: Key[] = [
   },
 ];
 
+const operators: OperatorDefinition[] = [
+  { id: "matches", value: "matches", types: ["string", "number", "select"] },
+  { id: "earlier", value: "is earlier than", types: ["date"] },
+  { id: "later", value: "is later than", types: ["date"] },
+  { id: "contains", value: "contains", types: ["multiselect"] },
+];
+
 const mockOnChange = vi.fn();
 
 describe("Components: MultiFilterInput", () => {
@@ -35,6 +40,38 @@ describe("Components: MultiFilterInput", () => {
 
     expect(screen.getByRole("combobox", { name: "Filter key" })).toBeVisible();
     expect(screen.getByPlaceholderText("Add a filter...")).toBeVisible();
+  });
+
+  it("renders keys", async () => {
+    render(<MultiFilterInput keys={keys} onChange={mockOnChange} />);
+
+    await userEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByRole("option")).toHaveLength(keys.length);
+  });
+
+  it("renders default operators", async () => {
+    render(<MultiFilterInput keys={keys} onChange={mockOnChange} />);
+
+    await userEvent.click(screen.getByRole("combobox"));
+    await userEvent.click(screen.getByRole("option", { name: "String type" }));
+
+    expect(screen.getAllByRole("option")).toHaveLength(6);
+  });
+
+  it("renders custom operators", async () => {
+    render(
+      <MultiFilterInput
+        keys={keys}
+        operators={operators}
+        onChange={mockOnChange}
+      />
+    );
+
+    await userEvent.click(screen.getByRole("combobox"));
+    await userEvent.click(screen.getByRole("option", { name: "Date type" }));
+
+    expect(screen.getAllByRole("option")).toHaveLength(2);
   });
 
   it("renders filter chip", async () => {

@@ -1,10 +1,6 @@
-import { Key, Operator } from "./types";
+import { OperatorDefinition } from "./types";
 
-export const operators: {
-  id: Operator;
-  value: string;
-  types: Key["type"][];
-}[] = [
+export const operators: OperatorDefinition[] = [
   {
     id: "=",
     value: "equals",
