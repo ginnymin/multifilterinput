@@ -98,7 +98,7 @@ describe("Components: Filter", () => {
     expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
   });
 
-  it("renders with default select values", () => {
+  it("renders with default select values", async () => {
     render(
       <Filter
         keys={keys}
@@ -106,6 +106,8 @@ describe("Components: Filter", () => {
         defaultFilter={{ key: "4", operator: "=", value: "Value 2" }}
       />
     );
+
+    await screen.findByRole("combobox", { name: "Filter value" });
 
     expect(screen.getByText("Select type")).toBeVisible();
     expect(screen.getByText("equals")).toBeVisible();
@@ -115,7 +117,31 @@ describe("Components: Filter", () => {
     expect(screen.getByRole("combobox", { name: "Filter value" })).toHaveValue(
       "Value 2"
     );
+
+    await userEvent.keyboard("{Escape}");
+
     expect(screen.getByRole("button", { name: "Save filter" })).toBeEnabled();
+  });
+
+  it("renders with operator editable when default filter has set or !set", async () => {
+    render(
+      <Filter
+        keys={keys}
+        onSelect={mockOnSelect}
+        defaultFilter={{ key: "1", operator: "set" }}
+      />
+    );
+
+    await screen.findByRole("combobox", { name: "Filter operator" });
+
+    expect(screen.getByText("String type")).toBeVisible();
+    expect(screen.queryByText("set")).toBeNull();
+    expect(
+      screen.getByRole("combobox", { name: "Filter operator" })
+    ).toBeVisible();
+    expect(
+      screen.getByRole("combobox", { name: "Filter operator" })
+    ).toHaveValue("is set");
   });
 
   it("calls onSelect when user clicks save", async () => {

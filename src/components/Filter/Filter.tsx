@@ -6,6 +6,7 @@ import {
   useState,
   type FC,
   useRef,
+  useEffect,
 } from "react";
 
 import { KeySelector, type KeySelectorProps } from "@components/KeySelector";
@@ -108,6 +109,17 @@ export const Filter: FC<Props> = ({
     [operator, operators]
   );
 
+  // for when we're editing a filter that has set or !set as the oeprator
+  // we need the operator selector to be editable on load instead of the value filter
+  useEffect(() => {
+    if (
+      defaultFilter?.operator === "set" ||
+      defaultFilter?.operator === "!set"
+    ) {
+      setOperator(undefined);
+    }
+  }, [defaultFilter?.operator]);
+
   return (
     <div {...props} className={clsx("flex gap-2 items-baseline", className)}>
       {currentKey !== undefined ? (
@@ -139,6 +151,8 @@ export const Filter: FC<Props> = ({
 
       {currentKey !== undefined &&
         operator !== undefined &&
+        operator !== "set" &&
+        operator !== "!set" &&
         (currentKey.type === "multiselect" || currentKey.type === "select" ? (
           <ValueInput
             type={currentKey.type}
